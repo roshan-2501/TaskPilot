@@ -24,6 +24,9 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+jwt:
+  secret: bXlzdXBlcnNlY3JldGtleWZvcnByb2plY3RtYW5hZ2VtZW50cGxhdGZvcm0=
+  access-token-expiry: 900000  # 15 minutes in ms
 
 eureka:
   client:
