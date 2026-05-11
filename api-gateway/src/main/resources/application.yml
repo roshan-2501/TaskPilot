@@ -6,41 +6,41 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        # ✅ PUBLIC — no AuthFilter
-        - id: auth-service
-          uri: lb://auth-service
-          predicates:
-            - Path=/api/v1/auth/**
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: lb://auth-service
+              predicates:
+                - Path=/api/v1/auth/**
 
-        # 🔒 PROTECTED — AuthFilter applied
-        - id: workspace-service
-          uri: lb://workspace-service
-          predicates:
-            - Path=/api/v1/workspaces/**
-          filters:
-            - AuthFilter
+            - id: workspace-service
+              uri: lb://workspace-service
+              predicates:
+                - Path=/api/v1/workspaces/**
+              filters:
+                - JwtAuthFilter
 
-        - id: project-task-service
-          uri: lb://project-task-service
-          predicates:
-            - Path=/api/v1/projects/**,/api/v1/tasks/**
-          filters:
-            - AuthFilter
+            - id: project-task-service
+              uri: lb://project-task-service
+              predicates:
+                - Path=/api/v1/projects/**,/api/v1/tasks/**
+              filters:
+                - JwtAuthFilter
 
-        - id: notification-service
-          uri: lb://notification-service
-          predicates:
-            - Path=/api/v1/notifications/**
-          filters:
-            - AuthFilter
+            - id: notification-service
+              uri: lb://notification-service
+              predicates:
+                - Path=/api/v1/notifications/**
+              filters:
+                - JwtAuthFilter
 
-        - id: file-service
-          uri: lb://file-service
-          predicates:
-            - Path=/api/v1/files/**
-          filters:
-            - AuthFilter
+            - id: file-service
+              uri: lb://file-service
+              predicates:
+                - Path=/api/v1/files/**
+              filters:
+                - JwtAuthFilter
 
 jwt:
   secret: bXlzdXBlcnNlY3JldGtleWZvcnByb2plY3RtYW5hZ2VtZW50cGxhdGZvcm0=
@@ -51,9 +51,3 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info
